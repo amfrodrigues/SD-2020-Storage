@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="StorageJar">
+    <output-path>$PROJECT_DIR$/out/artifacts/StorageJar</output-path>
+    <root id="archive" name="StorageJar.jar">
+      <element id="module-output" name="Storage" />
+      <element id="library" level="application" name="com.fasterxml.jackson.core:jackson-databind:2.0.4" />
+      <element id="library" level="application" name="org.codehaus.jackson:jackson-asl:0.9.5" />
+    </root>
+  </artifact>
+</component>
