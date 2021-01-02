@@ -1,5 +1,3 @@
-package com.storage;
-
 //package harreader imports
 
 import harreader.HarReader;
@@ -8,6 +6,7 @@ import harreader.model.Har;
 import harreader.model.HarEntry;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
@@ -20,9 +19,8 @@ public class StorageService extends UnicastRemoteObject implements StorageServic
     public StorageService() throws RemoteException {
     }
 
-    //interface functions
-    @Override
-    public void FillResourcesMap(String path, String fileName, LinkedHashMap<String, ArrayList<ResourceInfo>> timeHarMap) throws HarReaderException {
+    //private functions
+    private void FillResourcesMap(String path, String fileName, LinkedHashMap<String, ArrayList<ResourceInfo>> timeHarMap) throws HarReaderException {
         int[] count = new int[]{0};
         int fileCount = 0;
         try {
@@ -64,6 +62,25 @@ public class StorageService extends UnicastRemoteObject implements StorageServic
             // e.printStackTrace();
             System.out.println(ex.getMessage());
         }
+    }
+
+    //interface function
+    @Override
+    public boolean sendData(String filename, byte[] data, int len) throws RemoteException {
+
+        try{
+            File f = new File(".\\received",filename);
+            f.createNewFile();
+            FileOutputStream out = new FileOutputStream(f,true);
+            out.write(data,0,len);
+            out.flush();
+            out.close();
+            System.out.println("Done writing data...");
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        return true;
     }
 
 }
