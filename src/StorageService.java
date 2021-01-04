@@ -15,19 +15,24 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class StorageService extends UnicastRemoteObject implements StorageServiceInterface{
 
+    private final String path_saved_files = ".\\received\\";
+    private LinkedHashMap<String,ArrayList<ResourceInfo>> timeHashMap;
     //constructor
     public StorageService() throws RemoteException {
+        this.timeHashMap = new LinkedHashMap<>();
     }
 
-    //private functions
     private void FillResourcesMap(String path, String fileName, LinkedHashMap<String, ArrayList<ResourceInfo>> timeHarMap) throws HarReaderException {
+        //private functions
         int[] count = new int[]{0};
         int fileCount = 0;
         try {
             HarReader harReader = new HarReader();
             File file = new File(path + fileName + ".har");
+            System.out.println("STORAGE: "+"Vou carregar ficheiro");
             while (file.exists()) {
                 Har otherHar = harReader.readFromFile(file);
+                System.out.println("STORAGE: "+"FICHEIRO EXISTE");
                 for (HarEntry otherEntry : otherHar.getLog().getEntries()) {
                     if (!otherEntry.getResponse().getHeaders().get(0).getValue().contains("no-cache")) {
                         ResourceInfo resourceInfo = new ResourceInfo();
@@ -46,8 +51,9 @@ public class StorageService extends UnicastRemoteObject implements StorageServic
                                     return;
                                 }
                             });
-                            if (!repeatedCall.get())
+                            if (!repeatedCall.get()) {
                                 timeHarMap.get(otherEntry.getRequest().getUrl()).add(resourceInfo);
+                            }
                         } else {
                             ArrayList<ResourceInfo> l = new ArrayList<>();
                             l.add(resourceInfo);
@@ -62,6 +68,8 @@ public class StorageService extends UnicastRemoteObject implements StorageServic
             // e.printStackTrace();
             System.out.println(ex.getMessage());
         }
+        System.out.println("STORAGE: "+timeHashMap.size());
+
     }
 
     //interface function
@@ -69,18 +77,29 @@ public class StorageService extends UnicastRemoteObject implements StorageServic
     public boolean sendData(String filename, byte[] data, int len) throws RemoteException {
 
         try{
-            File f = new File(".\\received",filename);
+            File f = new File(path_saved_files+filename+ ".har");
             f.createNewFile();
             FileOutputStream out = new FileOutputStream(f,true);
             out.write(data,0,len);
             out.flush();
             out.close();
-            System.out.println("Done writing data...");
+            System.out.println("STORAGE: "+"Done writing data...");
+            return true;
         }catch(Exception e){
             e.printStackTrace();
         }
 
-        return true;
+        return false;
+    }
+
+    @Override
+    public void LoadFiles(String filename) throws RemoteException {
+        try {
+            FillResourcesMap(path_saved_files, filename, this.timeHashMap);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
     }
 
 }
