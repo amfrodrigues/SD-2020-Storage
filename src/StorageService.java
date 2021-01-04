@@ -29,10 +29,8 @@ public class StorageService extends UnicastRemoteObject implements StorageServic
         try {
             HarReader harReader = new HarReader();
             File file = new File(path + fileName + ".har");
-            System.out.println("STORAGE: "+"Vou carregar ficheiro");
             while (file.exists()) {
                 Har otherHar = harReader.readFromFile(file);
-                System.out.println("STORAGE: "+"FICHEIRO EXISTE");
                 for (HarEntry otherEntry : otherHar.getLog().getEntries()) {
                     if (!otherEntry.getResponse().getHeaders().get(0).getValue().contains("no-cache")) {
                         ResourceInfo resourceInfo = new ResourceInfo();
@@ -68,8 +66,6 @@ public class StorageService extends UnicastRemoteObject implements StorageServic
             // e.printStackTrace();
             System.out.println(ex.getMessage());
         }
-        System.out.println("STORAGE: "+timeHashMap.size());
-
     }
 
     //interface function
