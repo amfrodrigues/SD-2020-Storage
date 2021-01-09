@@ -7,7 +7,9 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="com.fasterxml.jackson.core:jackson-core:2.0.4" level="application" />
     <orderEntry type="library" name="com.fasterxml.jackson.core:jackson-databind:2.0.4" level="application" />
+    <orderEntry type="library" name="org.codehaus.jackson:jackson-core-asl:1.9.13" level="application" />
     <orderEntry type="library" name="org.codehaus.jackson:jackson-asl:0.9.5" level="application" />
   </component>
 </module>

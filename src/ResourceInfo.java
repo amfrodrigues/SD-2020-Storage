@@ -1,5 +1,3 @@
-package com.storage;
-
 public class ResourceInfo {
     // variables
     public String resourceType;
