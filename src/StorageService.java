@@ -7,22 +7,24 @@ import harreader.model.HarEntry;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class StorageService extends UnicastRemoteObject implements StorageServiceInterface{
+public class StorageService extends UnicastRemoteObject implements StorageServiceInterface, Serializable {
     //variables
     private final String path_saved_files = ".\\received\\";
-    private LinkedHashMap<String,ArrayList<ResourceInfo>> timeHarMap;
+    private LinkedHashMap<String,ArrayList<ResourceInfo>> timeHarMap = new LinkedHashMap<>();
+    private LinkedList<CombinationProcessingData> combinationStatistics = new LinkedList<CombinationProcessingData>();
     private int fileCount;
 
 
     //constructor
     public StorageService() throws RemoteException {
-        this.timeHarMap = new LinkedHashMap<>();
     }
 
     //interface function
@@ -60,13 +62,22 @@ public class StorageService extends UnicastRemoteObject implements StorageServic
         return this.timeHarMap;
     }
 
-
+    @Override
+    public int getcombinationsStatisticsize() throws RemoteException { return this.combinationStatistics.size(); }
 
     @Override
-    public int getFileCount() throws RemoteException {
-        return this.fileCount;
+    public void clearCombStatistics() throws RemoteException {
+        this.combinationStatistics.clear();
     }
 
+    @Override
+    public int getFileCount() throws RemoteException { return this.fileCount; }
+
+    @Override
+    public void process_reducer_data(CombinationProcessingData combinationInfo) {
+        this.combinationStatistics.add(combinationInfo);
+        System.out.println("STORAGE : Estou a Guardar as estatisticas");
+    }
 
 
     //private functions
