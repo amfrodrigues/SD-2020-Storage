@@ -16,8 +16,9 @@ public class StorageMain {
         try{
             storageService = new StorageService();
             r.rebind("storageservice", storageService);
-
-            System.out.println("Storage ready");
+            storageService.LoadFiles("www_nytimes_com");
+            System.out.println("Storage fileCount = "+storageService.getFileCount());
+            System.out.println("Storage ready port: "+port);
         }catch(Exception e) {
             System.out.println("Storage main " + e.getMessage());
         }
