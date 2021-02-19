@@ -1,7 +1,6 @@
 //package harreader imports
 
 import harreader.HarReader;
-import harreader.HarReaderException;
 import harreader.model.Har;
 import harreader.model.HarEntry;
 
@@ -19,7 +18,7 @@ public class StorageService extends UnicastRemoteObject implements StorageServic
     //variables
     private final String path_saved_files = ".\\received\\";
     private LinkedHashMap<String,ArrayList<ResourceInfo>> timeHarMap = new LinkedHashMap<>();
-    private LinkedList<CombinationProcessingData> combinationStatistics = new LinkedList<>();
+    private LinkedList<ProcessCombinationModel> combinationStatistics = new LinkedList<ProcessCombinationModel>();
     private int fileCount;
 
 
@@ -71,22 +70,22 @@ public class StorageService extends UnicastRemoteObject implements StorageServic
     }
 
     @Override
-    public LinkedList<CombinationProcessingData> getcombinationsStatistic() {
-        return combinationStatistics;
+    public LinkedList<ProcessCombinationModel> getcombinationsStatistic() {
+        System.out.println("Giving combinationStatistics"); return combinationStatistics;
     }
 
     @Override
     public int getFileCount() throws RemoteException { return this.fileCount; }
 
     @Override
-    public void process_reducer_data(CombinationProcessingData combinationInfo) {
-        this.combinationStatistics.add(combinationInfo);
-        System.out.println("STORAGE : Estou a Guardar as estatisticas");
+    public void addcombinationsStatistic(ArrayList<ProcessCombinationModel >combinationInfo) {
+        combinationStatistics.addAll(combinationInfo);
     }
 
 
     //private functions
-    private int FillResourcesMap(String path, String fileName, LinkedHashMap<String, ArrayList<ResourceInfo>> timeHarMap) throws HarReaderException {
+    private int FillResourcesMap(String path, String fileName, LinkedHashMap<String, ArrayList<ResourceInfo>> timeHarMap)
+    {
         //private functions
         int fileCount = 0;
         try {
@@ -109,7 +108,6 @@ public class StorageService extends UnicastRemoteObject implements StorageServic
                             list.forEach(value -> {
                                 if (value.resourceTime.equals(resourceInfo.resourceTime)) {
                                     repeatedCall.set(true);
-                                    return;
                                 }
                             });
                             if (!repeatedCall.get()) {

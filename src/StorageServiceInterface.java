@@ -10,8 +10,8 @@ public interface StorageServiceInterface extends Remote {
     boolean sendData(String filename, byte[] data, int len) throws RemoteException;
     LinkedHashMap<String, ArrayList<ResourceInfo>>  getTimeHarMap() throws RemoteException;
     int getFileCount() throws RemoteException;
-    void process_reducer_data(CombinationProcessingData combinationInfo) throws RemoteException;
+    void addcombinationsStatistic(ArrayList<ProcessCombinationModel> combinationInfo) throws RemoteException;
     int getcombinationsStatisticsize() throws RemoteException;
     void clearCombStatistics() throws RemoteException;
-    LinkedList<CombinationProcessingData> getcombinationsStatistic() throws RemoteException;
+    LinkedList<ProcessCombinationModel> getcombinationsStatistic() throws RemoteException;
 }
