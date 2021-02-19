@@ -2,6 +2,7 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 
 
 public interface StorageServiceInterface extends Remote {
@@ -12,4 +13,5 @@ public interface StorageServiceInterface extends Remote {
     void process_reducer_data(CombinationProcessingData combinationInfo) throws RemoteException;
     int getcombinationsStatisticsize() throws RemoteException;
     void clearCombStatistics() throws RemoteException;
+    LinkedList<CombinationProcessingData> getcombinationsStatistic() throws RemoteException;
 }

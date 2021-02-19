@@ -19,7 +19,7 @@ public class StorageService extends UnicastRemoteObject implements StorageServic
     //variables
     private final String path_saved_files = ".\\received\\";
     private LinkedHashMap<String,ArrayList<ResourceInfo>> timeHarMap = new LinkedHashMap<>();
-    private LinkedList<CombinationProcessingData> combinationStatistics = new LinkedList<CombinationProcessingData>();
+    private LinkedList<CombinationProcessingData> combinationStatistics = new LinkedList<>();
     private int fileCount;
 
 
@@ -71,6 +71,11 @@ public class StorageService extends UnicastRemoteObject implements StorageServic
     }
 
     @Override
+    public LinkedList<CombinationProcessingData> getcombinationsStatistic() {
+        return combinationStatistics;
+    }
+
+    @Override
     public int getFileCount() throws RemoteException { return this.fileCount; }
 
     @Override
@@ -83,7 +88,6 @@ public class StorageService extends UnicastRemoteObject implements StorageServic
     //private functions
     private int FillResourcesMap(String path, String fileName, LinkedHashMap<String, ArrayList<ResourceInfo>> timeHarMap) throws HarReaderException {
         //private functions
-        int[] count = new int[]{0};
         int fileCount = 0;
         try {
             HarReader harReader = new HarReader();
